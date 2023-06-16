@@ -85,8 +85,8 @@ class Project
 
   getYoungestUser() {
     const allUsersAge = this.users.map(user => user.age);
-    const maxUserAge = Math.max(...allUsersAge);
-    return this.users.filter((user) => user.age === maxUserAge);
+    const minUserAge = Math.min(...allUsersAge);
+    return this.users.filter((user) => user.age === minUserAge);
   }
 
   countHobbies(hobby) {
