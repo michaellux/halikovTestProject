@@ -24,10 +24,15 @@ User.prototype.getAge = function () {
   return this.user.age;
 };
 
-class Project
+export class Project
 {
-  constructor() {
-    this.users = this.generateUsers();
+  constructor(users) {
+    if (users) {
+      this.users = users;
+    }
+    else {
+      this.users = this.generateUsers();
+    }
   }
 
   generateUsers() {
@@ -65,7 +70,8 @@ class Project
   }
 
   findUser(name, age) {
-    return this.users.filter((user) => (user.name === name) && (user.age === age));
+    let result = this.users.filter((user) => (user.user.name === name) && (user.user.age === Number(age)));
+    return result;
   }
 
   filterUsers(ageFrom, ageTo) {

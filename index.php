@@ -25,7 +25,7 @@
       <div style="width: 40%;">
         <div>
           <h1>FindUser</h1>
-          <form id="findUser" action="index.php">
+          <form class="callFunction" id="findUser" action="index.php">
             <input type="hidden" name="function" value="findUser">
             <label for="name">Name:</label>
             <input required name="name" type="text" />
@@ -35,12 +35,12 @@
                <input type="submit" value="Выполнить JS">
                <input type="submit" value="Выполнить PHP">
             </div>
-            <div><?= $findUserResult ?></div>
+            <div id="findUserResult"><?= $findUserResult ?></div>
           </form>
         </div>
         <div>
           <h1>FilterUsers</h1>
-          <form id="filterUsers" action="index.php">
+          <form class="callFunction" id="filterUsers" action="index.php">
             <input type="hidden" name="function" value="filterUsers">
             <label for="ageFrom">Age from:</label>
             <input required name="ageFrom" type="text" />
@@ -55,7 +55,7 @@
         </div>
         <div>
            <h1>AddHobby</h1>
-          <form id="addHobby" action="index.php">
+          <form class="callFunction" id="addHobby" action="index.php">
             <input type="hidden" name="function" value="addHobby">
             <label for="name">Name:</label>
             <input required name="name" type="text" />
@@ -70,7 +70,7 @@
         </div>
         <div>
            <h1>RemoveHobby</h1>
-          <form id="removeHobby" action="index.php">
+          <form class="callFunction" id="removeHobby" action="index.php">
             <input type="hidden" name="function" value="removeHobby">
             <label for="name">Name:</label>
             <input required name="name" type="text" />
@@ -85,7 +85,7 @@
         </div>
         <div>
            <h1>GetYoungestUser</h1>
-          <form id="getYoungestUser" action="index.php">
+          <form class="callFunction" id="getYoungestUser" action="index.php">
             <input type="hidden" name="function" value="getYoungestUser">
            <div style="margin: 1rem auto;">
                <input type="submit" value="Выполнить JS">
@@ -97,7 +97,7 @@
 
         <div>
            <h1>CountHobbies</h1>
-          <form id="countHobbies" action="index.php">
+          <form class="callFunction" id="countHobbies" action="index.php">
             <input type="hidden" name="function" value="countHobbies">
             <label for="hobby">Hobby:</label>
             <input required name="hobby" type="text" />
@@ -110,7 +110,7 @@
         </div>
         <div>
            <h1>FindUsersBorn</h1>
-          <form id="findUsersBorn" action="index.php">
+          <form class="callFunction" id="findUsersBorn" action="index.php">
             <input type="hidden" name="function" value="findUsersBorn">
             <label for="day">Day:</label>
             <input required name="day" type="text" />
@@ -123,6 +123,48 @@
             <div><?= $findUsersBornResult ?></div>
           </form>
         </div>
+        <script type="module">
+          import users from './users.json' assert {type: 'json'};
+          import { Project } from './functions.js';
+
+          let forms = document.querySelectorAll('.callFunction');
+          forms.forEach(form => {
+              form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                let formData = new FormData(form);
+                let functionName = formData.get('function');
+                let result = '';
+                let type = '';
+                switch (functionName) {
+                  case 'findUser':
+                    console.dir(Project);
+                    let project = new Project(users);
+                    result = project.findUser(formData.get('name'), formData.get('age'));
+                    console.log(result);
+                    break;
+                
+                  default:
+                    break;
+                }
+
+                fetch('listener.php', {
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(result),
+                  method: 'POST',
+                })
+               .then(response => response.text())
+                .then(data => {
+                  console.log(data)
+                  document.getElementById(`${functionName}Result`).innerHTML = data;
+                })
+                .catch(function(error) {
+                  console.error(error);
+                });
+              });
+          });
+        </script>
       </div>
       <div style="width: 60%;">
          <?=$jsonTable ?>
@@ -131,14 +173,14 @@
   <?php else :?>
       <?php include('createjson.php'); ?>
       <script type="module">
-    import getUsers from './functions.js';
+    import { getUsers } from './functions.js';
     
-    var form = document.querySelector('#getData');
+    let form = document.querySelector('#getData');
     form.addEventListener('submit', function(event) {
       event.preventDefault();
 
-      var formData = new FormData(form);
-      var users = getUsers();
+      let formData = new FormData(form);
+      let users = getUsers();
       console.log(users);
       fetch('createjson.php', {
         headers: {
