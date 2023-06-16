@@ -2,6 +2,10 @@
 
 ## Solution
 
+### Entry point
+
+```index.php```
+
 ### Generate users
 
 ![Скриншот программы](./getData.png)
