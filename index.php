@@ -199,9 +199,7 @@
   <?php else : ?>
     <?php include('createjson.php'); ?>
     <script type="module">
-      import {
-        getUsers
-      } from './functions.js';
+      import { getUsers } from './functions.js';
 
       let form = document.querySelector('#getData');
       form.addEventListener('submit', function(event) {

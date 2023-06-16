@@ -3,7 +3,7 @@
 import { faker } from 'https://cdn.skypack.dev/@faker-js/faker';
 import { differenceInYears, getDate, getYear, format } from 'https://cdn.jsdelivr.net/npm/date-fns@2.23.0/esm/index.js'
 
-class User {
+export class User {
   constructor(name, age, hobbies, { street, city, country }, { day, month, year }) {
     this.user = this.createUser(name, age, hobbies, { street, city, country }, { day, month, year });
   }
@@ -111,7 +111,7 @@ export class Project
   }
 }
 
-export default function getUsers() {
+export function getUsers() {
   let project = new Project();
   console.log("return");
   return project.users;
