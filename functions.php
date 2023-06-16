@@ -1,24 +1,80 @@
 <?php
+
 function loadUsers()
 {
   $f_json = './users.json';
   if (file_exists($f_json)) {
-    $json = file_get_contents("$f_json");
+    $jsonStr = file_get_contents("$f_json");
+    $json = json_decode($jsonStr, TRUE);
     return $json;
   }
 }
 
-//https://itecnote.com/tecnote/php-how-to-parse-json-into-a-html-table-using-php/
-function printJson()
+function findUser($name, $age)
 {
-  //echo 'test';
-   $arr = $data = json_decode(loadUsers(), TRUE);
-   //echo $arr;
+  $users = loadUsers();
+  $result = array_filter($users, function ($user)  use ($name) {
+    return $user['user']['name'] === $name;
+  });
+  return $result;
+}
+
+function filterUsers($ageFrom, $ageTo)
+{
+  $users = loadUsers();
+  $result = array_filter($users, function ($user) use($ageFrom, $ageTo) {
+    return ($user['user']['age'] >= $ageFrom) && ($user['user']['age'] <= $ageTo);
+  });
+  return $result;
+}
+
+function addHobby($name, $hobby)
+{
+  $users = loadUsers();
+  $targetUser = array_filter($users, function ($user) use($name, $hobby) {
+    return $user['user']['name'] === $name;
+  });
+  $targetUser = reset($targetUser);
+  if ($targetUser != null) {
+    array_push($targetUser['user']['hobbies'], $hobby);
+    $result = $targetUser['user']['hobbies'];
+  }
+  else {
+    $result = null;
+  }
+
+  return $result;
+}
+
+function removeHobby($name, $hobby)
+{
+  $users = loadUsers();
+  $targetUser = array_filter($users, function ($user) use($name, $hobby) {
+    return $user['user']['name'] === $name;
+  });
+  $targetUser = reset($targetUser);
+  if ($targetUser != null) {
+    $result = array_filter($targetUser['user']['hobbies'], function ($targetHobby) use($hobby) {
+      return $targetHobby != $hobby;
+    });
+  }
+  else {
+    $result = null;
+  }
+  return $result;
+}
+
+//https://itecnote.com/tecnote/php-how-to-parse-json-into-a-html-table-using-php/
+function printJson($arr)
+{
    $html = "";
     if ($arr && is_array($arr)) {
         $html .= _arrayToHtmlTableRecursive($arr);
     }
-    echo $html;
+    else if ($arr === null){
+      $html = null;
+    }
+    return $html;
 }
 
 function _arrayToHtmlTableRecursive($arr) {
@@ -41,4 +97,4 @@ function _arrayToHtmlTableRecursive($arr) {
     return $str;
 }
 
-printJson();
+$jsonTable = printJson(loadUsers());
