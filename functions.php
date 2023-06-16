@@ -64,6 +64,37 @@ function removeHobby($name, $hobby)
   return $result;
 }
 
+function getYoungestUser()
+{
+  $users = loadUsers();
+  $allUsersAge = array_map(function($user) { return $user['user']['age'];}, $users);
+  $minUserAge = min($allUsersAge);
+  return array_filter($users, function($user) use ($minUserAge) 
+    { return $user['user']['age'] === $minUserAge; });
+}
+
+function countHobbies($hobby)
+{
+   $users = loadUsers();
+   $counter = 0;
+   foreach ($users as $key => $user) {
+      $hobbies = $user['user']['hobbies'];
+      if (in_array($hobby, $hobbies)) {
+        $counter++;
+      }
+   }
+   return $counter;
+}
+
+function findUsersBorn($day, $month)
+{
+  $users = loadUsers();
+  $result = array_filter($users, function($user) use($day, $month) {
+    return ($user['user']['birthday']['day'] == $day) && ($user['user']['birthday']['month'] == $month);
+  });
+  return $result;
+}
+
 //https://itecnote.com/tecnote/php-how-to-parse-json-into-a-html-table-using-php/
 function printJson($arr)
 {

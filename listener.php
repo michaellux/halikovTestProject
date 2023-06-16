@@ -3,6 +3,9 @@ $findUserResult = '';
 $filterUsersResult = '';
 $addHobbyResult = '';
 $removeHobbyResult = '';
+$getYoungestUserResult = '';
+$countHobbiesResult = '';
+$findUsersBornResult = '';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   if (isset($_GET['function'])) 
   {
@@ -28,6 +31,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
        $removeHobbyResult = printJson(removeHobby($_GET['name'], $_GET['hobby']));
         if ($removeHobbyResult === '' || $removeHobbyResult === null) {
           $removeHobbyResult = "Пользователь не найден";
+        }
+    }
+    else if ($_GET['function'] === 'getYoungestUser') {
+       $getYoungestUserResult = printJson(getYoungestUser());
+        if ($getYoungestUserResult === '' || $getYoungestUserResult === null) {
+          $getYoungestUserResult = "Пользователь не найден";
+        }
+    }
+    else if ($_GET['function'] === 'countHobbies') {
+       $countHobbiesResult = countHobbies($_GET['hobby']);
+        if ($countHobbiesResult === '' || $countHobbiesResult === null) {
+          $countHobbiesResult = "Пользователь не найден";
+        }
+    }
+    else if ($_GET['function'] === 'findUsersBorn') {
+       $findUsersBornResult = printJson(findUsersBorn($_GET['day'], $_GET['month']));
+        if ($findUsersBornResult === '' || $findUsersBornResult === null) {
+          $findUsersBornResult = "Пользователи не найдены";
         }
     }
   }

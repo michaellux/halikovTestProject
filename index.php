@@ -31,7 +31,7 @@
             <input required name="name" type="text" />
             <label for="age">Age:</label>
             <input required name="age" type="text" />
-            <div style="margin-top: 1rem;">
+            <div style="margin: 1rem auto;">
                <input type="submit" value="Выполнить JS">
                <input type="submit" value="Выполнить PHP">
             </div>
@@ -46,15 +46,13 @@
             <input required name="ageFrom" type="text" />
             <label for="ageTo">Age to:</label>
             <input required name="ageTo" type="text" />
-            <div style="margin-top: 1rem;">
+           <div style="margin: 1rem auto;">
                <input type="submit" value="Выполнить JS">
                <input type="submit" value="Выполнить PHP">
             </div>
             <div><?= $filterUsersResult ?></div>
           </form>
         </div>
-
-
         <div>
            <h1>AddHobby</h1>
           <form id="addHobby" action="index.php">
@@ -63,7 +61,7 @@
             <input required name="name" type="text" />
             <label for="hobby">Hobby:</label>
             <input required name="hobby" type="text" />
-            <div style="margin-top: 1rem;">
+           <div style="margin: 1rem auto;">
                <input type="submit" value="Выполнить JS">
                <input type="submit" value="Выполнить PHP">
             </div>
@@ -78,11 +76,51 @@
             <input required name="name" type="text" />
             <label for="hobby">Hobby:</label>
             <input required name="hobby" type="text" />
-            <div style="margin-top: 1rem;">
+           <div style="margin: 1rem auto;">
                <input type="submit" value="Выполнить JS">
                <input type="submit" value="Выполнить PHP">
             </div>
             <div><?= $removeHobbyResult ?></div>
+          </form>
+        </div>
+        <div>
+           <h1>GetYoungestUser</h1>
+          <form id="getYoungestUser" action="index.php">
+            <input type="hidden" name="function" value="getYoungestUser">
+           <div style="margin: 1rem auto;">
+               <input type="submit" value="Выполнить JS">
+               <input type="submit" value="Выполнить PHP">
+            </div>
+            <div><?= $getYoungestUserResult ?></div>
+          </form>
+        </div>
+
+        <div>
+           <h1>CountHobbies</h1>
+          <form id="countHobbies" action="index.php">
+            <input type="hidden" name="function" value="countHobbies">
+            <label for="hobby">Hobby:</label>
+            <input required name="hobby" type="text" />
+           <div style="margin: 1rem auto;">
+               <input type="submit" value="Выполнить JS">
+               <input type="submit" value="Выполнить PHP">
+            </div>
+            <div><?= $countHobbiesResult ?></div>
+          </form>
+        </div>
+        <div>
+           <h1>FindUsersBorn</h1>
+          <form id="findUsersBorn" action="index.php">
+            <input type="hidden" name="function" value="findUsersBorn">
+            <label for="day">Day:</label>
+            <input required name="day" type="text" />
+            <label for="month">Month:</label>
+            <input required name="month" type="text" />
+           <div style="margin: 1rem auto;">
+               <input type="submit" value="Выполнить JS">
+               <input type="submit" value="Выполнить PHP">
+            </div>
+            <div><?= $findUsersBornResult ?></div>
           </form>
         </div>
       </div>
