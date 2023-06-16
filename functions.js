@@ -75,30 +75,30 @@ export class Project
   }
 
   filterUsers(ageFrom, ageTo) {
-    return this.users.filter((user) => (user.age >= ageFrom) && (user.age <= ageTo));
+    return this.users.filter((user) => (user.user.age >= Number(ageFrom)) && (user.user.age <= Number(ageTo)));
   }
 
   addHobby(name, hobby) {
-    let targetUser = this.user.filter((user) => user.name === name);
-    targetUser.hobbies = [...targetUser.hobbies, hobby];
+    let targetUser = this.users.filter((user) => user.user.name === name)[0];
+    return targetUser.user.hobbies = [...targetUser.user.hobbies, hobby];
   }
 
   removeHobby(name, hobby) {
-    let targetUser = this.user.filter((user) => user.name === name);
-    let filteredHobbies = targetUser.hobbies.filter((targetHobby) => targetHobby != hobby);
-    targetUser.hobbies = filteredHobbies;
+    let targetUser = this.users.filter((user) => user.user.name === name)[0];
+    let filteredHobbies = targetUser.user.hobbies.filter((targetHobby) => targetHobby != hobby);
+    return targetUser.user.hobbies = filteredHobbies;
   }
 
   getYoungestUser() {
-    const allUsersAge = this.users.map(user => user.age);
+    const allUsersAge = this.users.map(user => user.user.age);
     const minUserAge = Math.min(...allUsersAge);
-    return this.users.filter((user) => user.age === minUserAge);
+    return this.users.filter((user) => user.user.age === minUserAge);
   }
 
   countHobbies(hobby) {
     let counter = 0;
     this.users.forEach(user => {
-      if (user.hobbies.includes(hobby)) {
+      if (user.user.hobbies.includes(hobby)) {
         counter++;
       }
     });
@@ -106,8 +106,8 @@ export class Project
   }
 
   findUsersBorn(day, month) {
-    return this.users.filter((user) => (user.birthday.day === day)
-    && (user.birthday.month === month));
+    return this.users.filter((user) => (user.user.birthday.day === Number(day))
+    && (user.user.birthday.month === month));
   }
 }
 
