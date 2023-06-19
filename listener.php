@@ -53,16 +53,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
   }
 }
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  require ('./functions.php');
-
-  $inputJSON = file_get_contents('php://input');
-  $arr = json_decode($inputJSON, true);
-  $result = printJson($arr);
-
-  if ($result === '') {
-    $result = 'Пользователь не найден';
-  }
-  echo $result;
-}

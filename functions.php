@@ -4,73 +4,65 @@ function loadUsers()
 {
   $f_json = './users.json';
   if (file_exists($f_json)) {
-    $jsonStr = file_get_contents("$f_json");
-    $json = json_decode($jsonStr, TRUE);
-    return $json;
+    return json_decode(file_get_contents($f_json), TRUE);
   }
+  return [];
 }
 
-function findUser($name, $age)
+function findUser($name)
 {
   $users = loadUsers();
-  $result = array_filter($users, function ($user)  use ($name) {
-    return $user['user']['name'] === $name;
+  return array_filter($users, function ($user)  use ($name) {
+    return $user['name'] === $name;
   });
-  return $result;
 }
 
 function filterUsers($ageFrom, $ageTo)
 {
   $users = loadUsers();
-  $result = array_filter($users, function ($user) use($ageFrom, $ageTo) {
-    return ($user['user']['age'] >= $ageFrom) && ($user['user']['age'] <= $ageTo);
+  return array_filter($users, function ($user) use($ageFrom, $ageTo) {
+    return ($user['age'] >= $ageFrom) && ($user['age'] <= $ageTo);
   });
-  return $result;
 }
 
 function addHobby($name, $hobby)
 {
+  $changedUsers = [];
   $users = loadUsers();
-  $targetUser = array_filter($users, function ($user) use($name, $hobby) {
-    return $user['user']['name'] === $name;
+  $targetUsers = array_filter($users, function ($user) use($name, $hobby) {
+    return $user['name'] === $name;
   });
-  $targetUser = reset($targetUser);
-  if ($targetUser != null) {
-    array_push($targetUser['user']['hobbies'], $hobby);
-    $result = $targetUser['user']['hobbies'];
+  foreach ($targetUsers as $key => $targetUser) {
+    $targetUser['hobbies'][] = $hobby;
+    $changedUsers[] = $targetUser;
   }
-  else {
-    $result = null;
-  }
-
-  return $result;
+  return $changedUsers;
 }
 
 function removeHobby($name, $hobby)
 {
+  $changedUsers = [];
   $users = loadUsers();
-  $targetUser = array_filter($users, function ($user) use($name, $hobby) {
-    return $user['user']['name'] === $name;
+  $targetUsers = array_filter($users, function ($user) use($name, $hobby) {
+    return $user['name'] === $name;
   });
-  $targetUser = reset($targetUser);
-  if ($targetUser != null) {
-    $result = array_filter($targetUser['user']['hobbies'], function ($targetHobby) use($hobby) {
+  foreach ($targetUsers as $key => $targetUser) {
+    $filteredHobbies= array_filter($targetUser['hobbies'], function ($targetHobby) use ($hobby) {
       return $targetHobby != $hobby;
     });
+    $targetUser['hobbies'] = $filteredHobbies;
+    $changedUsers[] = $targetUser;
   }
-  else {
-    $result = null;
-  }
-  return $result;
+  return $changedUsers;
 }
 
 function getYoungestUser()
 {
   $users = loadUsers();
-  $allUsersAge = array_map(function($user) { return $user['user']['age'];}, $users);
+  $allUsersAge = array_map(function($user) { return $user['age'];}, $users);
   $minUserAge = min($allUsersAge);
   return array_filter($users, function($user) use ($minUserAge) 
-    { return $user['user']['age'] === $minUserAge; });
+    { return $user['age'] === $minUserAge; });
 }
 
 function countHobbies($hobby)
@@ -78,7 +70,7 @@ function countHobbies($hobby)
    $users = loadUsers();
    $counter = 0;
    foreach ($users as $key => $user) {
-      $hobbies = $user['user']['hobbies'];
+      $hobbies = $user['hobbies'];
       if (in_array($hobby, $hobbies)) {
         $counter++;
       }
@@ -89,10 +81,9 @@ function countHobbies($hobby)
 function findUsersBorn($day, $month)
 {
   $users = loadUsers();
-  $result = array_filter($users, function($user) use($day, $month) {
-    return ($user['user']['birthday']['day'] == $day) && ($user['user']['birthday']['month'] == $month);
+  return array_filter($users, function($user) use($day, $month) {
+    return ($user['birthday']['day'] == $day) && ($user['birthday']['month'] == $month);
   });
-  return $result;
 }
 
 //https://itecnote.com/tecnote/php-how-to-parse-json-into-a-html-table-using-php/

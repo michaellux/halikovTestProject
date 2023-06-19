@@ -7,7 +7,6 @@
   <title>Document</title>
   <script type="module" src="./functions.js"></script>
   <?php include('functions.php'); ?>
-  <?php include('listener.php'); ?>
 </head>
 
 <body style="margin: 1rem;">
@@ -129,7 +128,7 @@
         <script type="module">
           import users from './users.json' assert { type: 'json' };
           import {
-            Project
+            Project, printJson
           } from './functions.js';
 
           let forms = document.querySelectorAll('.callFunction');
@@ -171,21 +170,7 @@
                 if (functionName === 'countHobbies') {
                   document.getElementById(`${functionName}Result`).innerHTML = result;
                 } else {
-                  fetch('listener.php', {
-                      headers: {
-                        'Content-Type': 'application/json'
-                      },
-                      body: JSON.stringify(result),
-                      method: 'POST',
-                    })
-                    .then(response => response.text())
-                    .then(data => {
-                      console.log(data)
-                      document.getElementById(`${functionName}Result`).innerHTML = data;
-                    })
-                    .catch(function(error) {
-                      console.error(error);
-                    });
+                  document.getElementById(`${functionName}Result`).innerHTML = result != '' ? printJson(result) : "Пользователь не найден";
                 }
               }
             });
@@ -197,9 +182,10 @@
       </div>
     </div>
   <?php else : ?>
-    <?php include('createjson.php'); ?>
     <script type="module">
-      import { getUsers } from './functions.js';
+      import {
+        getUsers
+      } from './functions.js';
 
       let form = document.querySelector('#getData');
       form.addEventListener('submit', function(event) {
