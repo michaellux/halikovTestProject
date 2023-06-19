@@ -29,13 +29,16 @@ function addHobby($name, $hobby)
 {
   $changedUsers = [];
   $users = loadUsers();
-  $targetUsers = array_filter($users, function ($user) use($name, $hobby) {
-    return $user['name'] === $name;
-  });
-  foreach ($targetUsers as $key => $targetUser) {
-    $targetUser['hobbies'][] = $hobby;
-    $changedUsers[] = $targetUser;
+
+  foreach ($users as $key => $user) {
+    if ($user['name'] === $name) {
+      $user['hobbies'][] = $hobby;
+      $users[$key] = $user;
+      $changedUsers[] = $user;
+    }
   }
+
+  saveJSON($users);
   return $changedUsers;
 }
 
@@ -43,16 +46,19 @@ function removeHobby($name, $hobby)
 {
   $changedUsers = [];
   $users = loadUsers();
-  $targetUsers = array_filter($users, function ($user) use($name, $hobby) {
-    return $user['name'] === $name;
-  });
-  foreach ($targetUsers as $key => $targetUser) {
-    $filteredHobbies= array_filter($targetUser['hobbies'], function ($targetHobby) use ($hobby) {
-      return $targetHobby != $hobby;
-    });
-    $targetUser['hobbies'] = $filteredHobbies;
-    $changedUsers[] = $targetUser;
+
+  foreach ($users as $key => $user) {
+    if ($user['name'] === $name) {
+      $filteredHobbies= array_filter($user['hobbies'], function ($targetHobby) use ($hobby) {
+        return $targetHobby != $hobby;
+      });
+      $user['hobbies'] = array_values($filteredHobbies);
+      $users[$key] = $user;
+      $changedUsers[] = $user;
+    }
   }
+
+  saveJSON($users);
   return $changedUsers;
 }
 
@@ -117,6 +123,12 @@ function _arrayToHtmlTableRecursive($arr) {
     $str .= "</tbody></table>";
 
     return $str;
+}
+
+function saveJSON($data) {
+  $f_json = './users.json';
+  $json_string = json_encode($data, JSON_PRETTY_PRINT);
+  file_put_contents($f_json, $json_string);
 }
 
 $jsonTable = printJson(loadUsers());
