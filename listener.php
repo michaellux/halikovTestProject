@@ -56,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   require_once('functions.php');
   $usersJSON = file_get_contents('php://input');
-  var_dump($usersJSON);
   $users = json_decode($usersJSON, true);
   saveJSON($users);
 }
