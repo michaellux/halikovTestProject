@@ -76,24 +76,31 @@ export class Project
 
   addHobby(name, hobby) {
     const changedUsers = [];
-    let targetUsers = this.users.filter((user) => user.name === name);
-    targetUsers.forEach(targetUser => {
-      targetUser.hobbies = [...targetUser.hobbies, hobby];
-      changedUsers.push(targetUser);
+
+    this.users.forEach((user, index) => {
+      if (user.name === name) {
+        user.hobbies = [...user.hobbies, hobby];
+        this.users[index] = user;
+        changedUsers.push(user);
+      }
     });
-    return changedUsers;
+
+    return { changedUsers, users: this.users };
   }
 
   removeHobby(name, hobby) {
-    const changedUsers = []
-    let targetUsers = this.users.filter((user) => user.name === name);
-    targetUsers.forEach(targetUser => {
-      let filteredHobbies = targetUser.hobbies.filter((targetHobby) => targetHobby != hobby);
-      targetUser.hobbies = filteredHobbies;
-      changedUsers.push(targetUser);
-    });
+    const changedUsers = [];
+
+    this.users.forEach((user, index) => {
+        if (user.name === name) {
+          let filteredHobbies = user.hobbies.filter((targetHobby) => targetHobby != hobby);
+          user.hobbies = filteredHobbies;
+          this.users[index] = user;
+          changedUsers.push(user);
+        }
+    });  
     
-    return changedUsers;
+    return { changedUsers, users: this.users };
   }
 
   getYoungestUser() {

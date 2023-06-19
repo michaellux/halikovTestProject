@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <script type="module" src="./functions.js"></script>
-  <?php include('functions.php'); ?>
+  <?php require_once('functions.php'); ?>
 </head>
 
 <body style="margin: 1rem;">
@@ -128,7 +128,8 @@
         <script type="module">
           import users from './users.json' assert { type: 'json' };
           import {
-            Project, printJson
+            Project,
+            printJson
           } from './functions.js';
 
           let forms = document.querySelectorAll('.callFunction');
@@ -169,6 +170,23 @@
                 }
                 if (functionName === 'countHobbies') {
                   document.getElementById(`${functionName}Result`).innerHTML = result;
+                } else if (functionName === 'addHobby' || functionName === 'removeHobby') {
+                  fetch('listener.php', {
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify(result.users),
+                      method: 'POST',
+                    })
+                    .then(function(response) {
+                      document.getElementById(`${functionName}Result`).innerHTML 
+                      = result.changedUsers != '' ? printJson(result.changedUsers) : "Пользователей нет";
+                      document.getElementById("jsonTableResult").innerHTML
+                      = result.users != '' ? printJson(result.users) : "Пользователей нет";
+                    })
+                    .catch(function(error) {
+                      console.error(error);
+                    });
                 } else {
                   document.getElementById(`${functionName}Result`).innerHTML = result != '' ? printJson(result) : "Пользователь не найден";
                 }
@@ -177,7 +195,7 @@
           });
         </script>
       </div>
-      <div style="width: 60%;">
+      <div id="jsonTableResult" style="width: 60%;">
         <?= $jsonTable ?>
       </div>
     </div>
